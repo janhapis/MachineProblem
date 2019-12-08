@@ -4,7 +4,8 @@ import numpy as np
 from numpy import *
 
 n = np.arange(0,200)
-x = eval(input("Enter x(n): "))
+x = eval(input('Input a function, x(n): '))
+Y = []
 
 def y(n):
     if n == 0:
@@ -13,9 +14,6 @@ def y(n):
         return 0.5*x[n+1]-0.5*x[n-1]
     elif n == 199:
         return 1.5*x[n]-2*x[n-1]+0.5*x[n-2]
-
-n = np.arange(0,200)      
-Y = []
 
 for i in np.arange(0,200):
     Y.append(y(i))
