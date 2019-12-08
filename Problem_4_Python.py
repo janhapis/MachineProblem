@@ -1,51 +1,54 @@
-import math 
+import math as math
 import numpy as np
 import matplotlib.pyplot as plt
 
-def y(h,vo,ang,ay,t):
-    y=h+vo*math.sin(ang)*t+(1/2)*ay*t**2
-    return y
-def x(vo,ang,ax,t):
-    x=vo*math.cos(ang)*t+(1/2)*ax*t**2
-    return x
-
+def yactual(h,vo,ang,ay,t):
+    yactual=h+vo*math.sin(ang)*t+(1/2)*ay*t**2
+    return yactual
+def xactual(vo,ang,ax,t):
+    xactual=vo*math.cos(ang)*t+(1/2)*ax*t**2
+    return xactual
+def yideal(h,vo,ang,t):
+    yideal=h+vo*math.sin(ang)*t+(1/2)*(-9.8)*t**2
+    return yideal
 def xideal(vo,ang,t):
     xideal=vo*math.cos(ang)*t
     return xideal
-    
+
 def projectile(h,vo,ang,ax,ay):
-    if ay == 0:
-        raise Exception('Error! y-component cannot be greater than or equal to zero as the projectile will not reach the ground.')
-        return
     if ay>=0:
-        raise Exception('Error! y-component cannot be greater than or equal to zero as the projectile will not reach the ground.')
+        raise Exception('y-component of acceleration cannot be greater than or equal to 0 as the projectile will not reach the ground.')
         return
+    
     ang=(ang*math.pi)/180
     tfinal=(-vo*math.sin(ang)+((vo*math.sin(ang))**2-2*ay*h)**(1/2))/ay
-    if tfinal<=0 or tfinal<(-vo*math.sin(ang)/ay):
+    if tfinal <=0:
         tfinal=(-vo*math.sin(ang)-((vo*math.sin(ang))**2-2*ay*h)**(1/2))/ay
-    Y=[]
-    X=[]
-    XIDEAL=[]
-    for t in np.arange(0,tfinal,0.01):
-        Y=Y+[y(h,vo,ang,ay,t)]
-        X=X+[x(vo,ang,ax,t)]
-        XIDEAL=XIDEAL+[xideal(vo,ang,t)]
+        
+    Yactual=[]
+    Xactual=[]
+    Xideal=[]
+    Yideal=[]
     
-    plt.grid()    
-    plt.title('Projectile Motion')
-    plt.xlabel('Range in Meters(m)')
-    plt.ylabel('Height in Meters(m)')
-    plt.plot(X,Y, 'b-',label = 'Non-ideal trajectory')
-    plt.plot(XIDEAL,Y, 'r--', label = 'Ideal trajectory')
-    plt.legend(loc="upper right")
-    plt.show()
+    for t in np.arange(0,tfinal,0.01):
+        Yactual=Yactual+[yactual(h,vo,ang,ay,t)]
+        Xactual=Xactual+[xactual(vo,ang,ax,t)]
+        Yideal=Yideal+[yideal(h,vo,ang,t)]
+        Xideal=Xideal+[xideal(vo,ang,t)]
 
+    plt.title('Projectile Motion')
+    plt.xlabel('range in meters(m)')
+    plt.ylabel('height in meters(m)')
+    plt.plot(Xactual,Yactual,'b-',label='actual trajectory')
+    plt.plot(Xideal,Yideal,'r--',label='ideal trajectory')
+    plt.legend(loc='upper right')
+    plt.grid()
+    
 print('-----------------------------------------')
-z = eval(input('Insert height: '))
-w = eval(input('Insert velocity: '))
-p = eval(input('Insert angle: '))
-o = eval(input('Insert x-component: '))
-t = eval(input('Insert y-component: '))
+z = eval(input('Insert height in m: '))
+w = eval(input('Insert velocity in m/s: '))
+p = eval(input('Insert angle in degrees with respect to x-axis: '))
+o = eval(input('Insert x-component of acceleration: '))
+t = eval(input('Insert y-component of acceleration: '))
 print('-----------------------------------------')
-projectile(z,w,p,o,t)            
+projectile(z,w,p,o,t)       
